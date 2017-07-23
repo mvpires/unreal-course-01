@@ -4,18 +4,14 @@ using namespace std;
 
 constexpr int WORLD_LENGHT = 5;
 void PrintIntro(int WORLD_LENGHT);
-string GetGuessAndPrintBack();
+string GetGuess();
+void PlayGame();
 
 int main()
 {
 	PrintIntro(WORLD_LENGHT);
-
-	//get a guess from a player
-
-	for (int i = 0; i < WORLD_LENGHT; i++)
-	{
-		GetGuessAndPrintBack();
-	}
+	PlayGame();
+	
 	
 	cout << endl;
 
@@ -32,14 +28,22 @@ void PrintIntro(int WORLD_LENGHT)
 	return;
 }
 
-string GetGuessAndPrintBack()
+void PlayGame()
+{
+	//get a guess from a player
+
+	for (int i = 0; i < WORLD_LENGHT; i++)
+	{
+		cout << "You've guessed: " << GetGuess();
+		cout << "\n";
+		cout << endl;
+	}
+}
+
+string GetGuess()
 {
 	cout << "Enter your guess: ";
 	string Guess = "";
 	getline(cin, Guess);
-
-	cout << "You've guessed: " << Guess;
-	cout << "\n";
-
 	return Guess;
 }
