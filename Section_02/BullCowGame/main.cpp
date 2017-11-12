@@ -6,11 +6,13 @@ constexpr int WORLD_LENGHT = 5;
 void PrintIntro(int WORLD_LENGHT);
 string GetGuess();
 void PlayGame();
+bool AskToPlayAgain();
 
 int main()
 {
 	PrintIntro(WORLD_LENGHT);
 	PlayGame();
+	AskToPlayAgain();
 	
 	
 	cout << endl;
@@ -46,4 +48,15 @@ string GetGuess()
 	string Guess = "";
 	getline(cin, Guess);
 	return Guess;
+}
+
+bool AskToPlayAgain()
+{
+	cout << "Do you want to play again?";
+	string Response = "";
+	getline(cin, Response);
+
+	return (Response[0] == 'y') || (Response[0] == 'Y');
+	
+
 }
