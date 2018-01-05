@@ -17,6 +17,7 @@ constexpr int32 NUMBER_OF_TURNS = 5;
 void PrintIntro(int32 WORLD_LENGHT);
 FText GetGuess();
 void PlayGame();
+<<<<<<< HEAD
 bool AksToPlayAgain();
 FBullCowGame BCGame;
 
@@ -28,6 +29,18 @@ int main()
 		PlayGame();
 	} 
 	while (AksToPlayAgain());
+=======
+bool AskToPlayAgain();
+
+int main()
+{
+	PrintIntro(WORLD_LENGHT);
+	PlayGame();
+	AskToPlayAgain();
+	
+	
+	cout << endl;
+>>>>>>> 679ce3469b243c76109bda20050f48a0d865992a
 
 	return 0;
 }
@@ -81,4 +94,15 @@ FText GetGuess()
 	FText Guess = "";
 	std::getline(std::cin, Guess);
 	return Guess;
+}
+
+bool AskToPlayAgain()
+{
+	cout << "Do you want to play again?";
+	string Response = "";
+	getline(cin, Response);
+
+	return (Response[0] == 'y') || (Response[0] == 'Y');
+	
+
 }
