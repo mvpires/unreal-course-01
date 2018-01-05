@@ -1,49 +1,84 @@
+/*
+Console executable that makes use of the FBullCow class.
+This acts as the view in a MVC pattern and is responsible for all user interactions.
+For game logic, see FBullCowGame class
+*/
+
+
 #include <iostream>
 #include <string>
-using namespace std;
+#include "FBullCowGame.h"
 
-constexpr int WORLD_LENGHT = 5;
-void PrintIntro(int WORLD_LENGHT);
-string GetGuess();
+using FText = std::string;
+using int32 = int;
+
+constexpr int32 WORLD_LENGHT = 9;
+constexpr int32 NUMBER_OF_TURNS = 5;
+void PrintIntro(int32 WORLD_LENGHT);
+FText GetGuess();
 void PlayGame();
+bool AksToPlayAgain();
+FBullCowGame BCGame;
 
 int main()
 {
-	PrintIntro(WORLD_LENGHT);
-	PlayGame();
-	
-	
-	cout << endl;
+	do
+	{ 
+		PrintIntro(WORLD_LENGHT);
+		PlayGame();
+	} 
+	while (AksToPlayAgain());
 
 	return 0;
 }
 
-void PrintIntro(int WORLD_LENGHT)
+void PrintIntro(int32 WORLD_LENGHT)
 {
 	//Game introduction
 	
-	cout << "Welcome to Bulls and Cows!\n";
-	cout << "Can you guess the " << WORLD_LENGHT << " letter isogram that I'm thinking of?\n";
+	std::cout << "Welcome to Bulls and Cows!\n";
+	std::cout << "Can you guess the " << BCGame.GetHiddenWordLenght() << " letter isogram that I'm thinking of?\n";
+	std::cout << std::endl;
 
 	return;
 }
 
 void PlayGame()
 {
+
+	BCGame.Reset();
+
+	int32 MaxTries = BCGame.GetMaxTries();
+
 	//get a guess from a player
 
-	for (int i = 0; i < WORLD_LENGHT; i++)
+	for (int32 i = 1; i <= MaxTries; i++)
 	{
-		cout << "You've guessed: " << GetGuess();
-		cout << "\n";
-		cout << endl;
+		FText Guess = GetGuess();
+
+		FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
+		std::cout << "Bulls: " << BullCowCount.Bulls;
+		std::cout << ". Cows: " << BullCowCount.Cows << std::endl;
+		std::cout << std::endl;
 	}
 }
 
-string GetGuess()
+bool AksToPlayAgain()
 {
-	cout << "Enter your guess: ";
-	string Guess = "";
-	getline(cin, Guess);
+	std::cout << "Do you want to play again? (y/n)";
+	FText Response = "";
+	std::getline(std::cin, Response);
+
+	return (Response[0] == 'y') || (Response[0] == 'Y');
+	
+		
+}
+
+FText GetGuess()
+{
+	int32 CurrentTry = BCGame.GetCurrentTry();
+	std::cout << "Try " << CurrentTry << " - Enter your guess: ";
+	FText Guess = "";
+	std::getline(std::cin, Guess);
 	return Guess;
 }
