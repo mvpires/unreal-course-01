@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
+#include "Engine/World.h"
 
 
 void ATankPlayerController::BeginPlay()
@@ -16,6 +17,7 @@ ATank* ATankPlayerController::GetControlledTank() const
 void  ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	AimTowardsCrosshair();
 }
 
 void ATankPlayerController::AimTowardsCrosshair()
@@ -24,8 +26,33 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *HitLocation.ToString())
+		GetControlledTank()->AimAt(HitLocation);
 	}
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const
+{
+	FHitResult HitResult;
+	auto StartLocation = PlayerCameraManager->GetCameraLocation();
+	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
+
+	if (GetWorld()->LineTraceSingleByChannel
+		(
+
+			HitResult,
+			StartLocation,
+			EndLocation,
+			ECollisionChannel::ECC_Visibility)
+		)
+	{
+		HitLocation = HitResult.Location;
+
+		return true;
+	}
+
+	HitLocation = FVector(0);
+
+	return false;
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& outHitLocation) const
@@ -35,6 +62,24 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& outHitLocation) cons
 	GetViewportSize(ViewPortSizeX, ViewPortSizeY);
 	auto ScreenLocation = FVector2D(ViewPortSizeX * CrosshairXLocation, ViewPortSizeY * CrosshairYLocation);
 
+	FVector LookDirection;
+
+	if (GetLookDirection(ScreenLocation, LookDirection))
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *LookDirection.ToString())
+
+		GetLookVectorHitLocation(LookDirection, outHitLocation);
+	}
+
 	return true;
+}
+
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
+{
+
+	FVector CameraWorldLocation;
+
+	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraWorldLocation, LookDirection);
+	
 }
 
