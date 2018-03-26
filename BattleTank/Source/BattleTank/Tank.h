@@ -20,6 +20,9 @@ protected:
 	
 	UTankAimingComponent * TankAimingComponent = nullptr;
 
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
+
 
 private:
 
@@ -35,6 +38,8 @@ private:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, Category = Firing)
+		float LaunchSpeed = 100000;
 	
 	
 };
