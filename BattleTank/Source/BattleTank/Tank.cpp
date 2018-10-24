@@ -56,7 +56,7 @@ void ATank::Fire()
 
 
 	auto time = GetWorld()->GetTimeSeconds();
-	UE_LOG(LogTemp, Warning, TEXT("%f: FIRE CARAI!"), time);
+	UE_LOG(LogTemp, Warning, TEXT("%f: FIRE"), time);
 
 	if (Barrel && isReloaded) {
 
